@@ -35,8 +35,9 @@ if(isset($_POST['create_pdf'])){
 			<tbody>
 			
 			';
- 				$sql = "SELECT * FROM cuentas WHERE codigo_cuenta LIKE '4%'";
+ 				$sql = "SELECT * FROM cuentas WHERE codigo_cuenta LIKE '4%' or codigo_cuenta LIKE '6%' or codigo_cuenta LIKE '7%'";
                 $ejecutar = $conexion->query($sql);
+            if($ejecutar->num_rows > 0){
                 while($acts = $ejecutar->fetch_assoc()){
                     $content .= '
                     <tr>
@@ -45,17 +46,23 @@ if(isset($_POST['create_pdf'])){
                     </tr> ';
                 }
                 
-                $consulta = "SELECT SUM((saldo_debe-saldo_haber)) total FROM cuentas WHERE codigo_cuenta LIKE '4%'";
+                $consulta = "SELECT SUM((saldo_debe-saldo_haber)) total FROM cuentas WHERE codigo_cuenta LIKE '4%'or codigo_cuenta LIKE '6%' or codigo_cuenta LIKE '7%'";
                 $ejecutar_consulta = $conexion->query($consulta);
                 if($ejecutar_consulta->num_rows > 0){
                     while ($regs = $ejecutar_consulta->fetch_assoc()) {
+                    	$color= '#F0A39C';
+                        $content.='<tr bgcolor="'.$color.'">';
                         $content .= '
-                        <tr>
                         <td class="text-left"  colspan="3" ><strong>Total</strong></td>
                         <td align="center">'.number_format($regs['total'],2).'</td>
                         </tr>';
                     }
                 }
+            }
+            else{
+				$mensaje = "No existen asientos registrados con las clases 6 o 7";
+				header("Location: estado-resultados.php?error=si&mensaje=$mensaje");
+													}
 $content .= '
 		</tbody>	
 		</table>
@@ -103,6 +110,15 @@ $content .= '
 				</div>
 				<div class="container">
 					<div class="row">
+						<div class="col-lg-12 well">
+                        <p align="justify" class="text-info">
+                            Aquí se muestran las cuentas registradas en el sistema.Considerando las clases de codigo:<br>
+                            4 generalmete representa a las cuentas de Patrimonio<br>
+                            6 generalmete representa a las cuentas de Gastos <br>
+                            7 generalmete representa a las cuentas de Ingresos. 
+                        </p>
+                    </div>
+                    <hr>
 						<div class="col-lg-12">
 
 							<table class="table ">
@@ -131,27 +147,35 @@ $content .= '
 
 												<table class="table table-condensed table-bordered table-hover ">
 													<tr>
-														<th colspan="2">Resultados</th>
+														<th >Cuentas</th>
+														<th >Totales</th>
 													</tr>
 													<?php
 													include_once("conexion.php");
-													$sql = "SELECT * FROM cuentas WHERE codigo_cuenta LIKE '4%'";
+													$sql = "SELECT * FROM cuentas WHERE codigo_cuenta LIKE '4%' or codigo_cuenta LIKE '6%' or codigo_cuenta LIKE '7%' ";
 													$ejecutar = $conexion->query($sql);
+													if($ejecutar->num_rows > 0) {						
 													while($acts = $ejecutar->fetch_assoc()){
 														echo "<tr colspan='2'>";
 														echo "<td >".$acts["codigo_cuenta"].". ".utf8_encode($acts["nombre_cuenta"])."</td>";
 														echo "<td class='text-right'>".number_format($acts["saldo_debe"]-$acts["saldo_haber"],2)."</td>";
 														echo "</tr>";
 													}
-													$consulta = "SELECT SUM((saldo_debe-saldo_haber)) total FROM cuentas WHERE codigo_cuenta LIKE '4%'";
+													$consulta = "SELECT SUM((saldo_debe-saldo_haber)) total FROM cuentas WHERE codigo_cuenta LIKE '4%' or codigo_cuenta LIKE '6%' or codigo_cuenta LIKE '7%'";
 													$ejecutar_consulta = $conexion->query($consulta);
+
 													if($ejecutar_consulta->num_rows > 0){
 														while ($regs = $ejecutar_consulta->fetch_assoc()) {
-															echo "<tr>";
+															echo "<tr class='danger'>";
 															echo "<td class='text-right'><strong>Total</strong></td>";
 															echo "<td align='right'>".number_format($regs["total"],2)."</td>";
 															echo "</tr>";
 														}
+													}
+													}
+													else{
+														$mensaje = "No existen asientos registrados con las clases 4,6 o 7";
+														header("Location: estado-resultados.php?error=si&mensaje=$mensaje");
 													}
 													?>
 												</table>
