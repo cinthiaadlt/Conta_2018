@@ -24,6 +24,7 @@
 				echo "<a href='eliminar-usuario.php' class='list-group-item'>&#0171; Eliminar usuario</a>";
 				echo "<a href='iva.php' class='list-group-item'>&#0171; IVA</a>";
 				echo "<a href='log.php' class='list-group-item'>&#0171; Ver log</a>";
+				echo "<a href='agregar-clase.php' class='list-group-item'>&#0171; Registrar anio contable</a>";
 				echo "</div>";
 				echo "</div>";
 				echo "</div>";
