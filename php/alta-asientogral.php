@@ -78,9 +78,9 @@ if($fecha_valida){
 
 			/* Si no existen subcuentas relacionadas con la cuenta, hacemos el asiento. */
 			if($res["tiene_subcuenta"] == "No"){
-				$ip = $_SERVER["HTTP_CLIENT_IP"];
-				if(!$ip) {$ip = $_SERVER["REMOTE_ADDR"];}
-				$sql = "INSERT INTO `sic115`.`registro`( `fecha`, `transaccion`, `cuenta`, `concepto`, `debe`, `haber`, `descripcion`, `partida_doble`, `fecha_modificacion`, `usuario_creacion`, `usuario_modif`, `ip`) VALUES ('$fecha', '$n_asiento', '$cuenta', '$concepto', '$debe', '$haber', '$explicacion', null, null, '$usuario', null, '$ip')";
+				/*$ip = $_SERVER["HTTP_CLIENT_IP"];
+				if(!$ip) {$ip = $_SERVER["REMOTE_ADDR"];}*/
+				$sql = "INSERT INTO `sic115`.`registro`( `fecha`, `transaccion`, `cuenta`, `concepto`, `debe`, `haber`, `descripcion`, `partida_doble`, `fecha_modificacion`, `usuario_creacion`, `usuario_modif`, `ip`) VALUES ('$fecha', '$n_asiento', '$cuenta', '$concepto', '$debe', '$haber', '$explicacion', null, null, '$usuario', null, null)";
 				$ejecutar_consulta = $conexion->query(utf8_decode($sql));
 				if($ejecutar_consulta){
                     echo "<script> setTimeout(function() { window.location = 'asiento-general.php?error=no'; }, 2000); </script>";
