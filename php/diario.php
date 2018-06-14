@@ -19,6 +19,15 @@ if(isset($_POST['create_pdf'])){
     $pdf->addPage();
     $content = '';
 
+    $content .='
+        <h2 align="center">LIBRO DIARIO</h2>
+                                    <p align="center">';
+                            $fecha_ac = actual_date();  
+                             $content .= '
+                             '.$fecha_ac.'
+                        </p>
+
+    ';
     if($ejecutar_consulta->num_rows!=0){
     $sql = "SELECT DISTINCTROW(transaccion) AS transacciones FROM registro";
     $ejecutar_consulta2 = $conexion->query($sql);
@@ -27,50 +36,41 @@ if(isset($_POST['create_pdf'])){
                      $transaccion1=$registro["transacciones"];
                      $content .= '
                   <div class="row">
-                        <div class="col-lg-12">
-                                 <h2 align="center">LIBRO DIARIO</h2>
-                                    <p align="center">';
-                                     $fechaactual = getdate();
-                                    print_r($fechaactual);
-                                    $content .= '
-                                    Fecha: '.$fechaactual[mday].' de '.$fechaactual[month].' de '.$fechaactual[year].' 
-                                    </p>
+                        <div class="col-lg-12" >
                             <div>
                                 <h3><strong> 
                                     Ficha N°: '.$transaccion1.'
                                </strong> </h3>
                             <br/>
                             </div>
-                            <table class="table-bordered" width="100%" border="1">
+                            <table width="100%" border="1" align="center">
 
-                                <thead>
-                                <tr height="10%">
-                                    <th width = "5%" align="center"> <b> ID </b></th>
-                                    <th width = "15%" align="center"><b> FECHA</b></th>
+                                <thead align="center">
+                                <tr>
+                                    <th width = "10%" align="center"> <b> ID </b></th>
+                                    <th width = "20%" align="center"><b> FECHA</b></th>
                                     <th width = "10%" align="center"><b> CUENTA</b></th>
-                                    <th width = "40%" align="center"><b> DESCRIPCION</b></th>
-                                    <th width = "10%" align="center"><b> DEBE</b> </th>
-                                    <th width = "10%" align="center"><b> HABER </b></th>
-                                    <th width = "15%" align="center"><b> DIFERENCIA </b></th>
+                                    <th width = "20%" align="center"><b> DEBE</b> </th>
+                                    <th width = "20%" align="center"><b> HABER </b></th>
+                                    <th width = "20%" align="center"><b> DIFERENCIA </b></th>
                                 </tr>
                                 </thead>
-                            <tbody>
+                            <tbody align="center">
                     ';
                 $transaccion1=$registro["transacciones"];
-                $sql_1 = "SELECT id, DATE_FORMAT(fecha,'%d-%m-%Y')as fecha, cuenta, concepto, debe, haber FROM registro WHERE transaccion = 1 ORDER BY fecha ASC";
+                $sql_1 = "SELECT id, DATE_FORMAT(fecha,'%d-%m-%Y')as fecha, cuenta, concepto, debe, haber FROM registro WHERE transaccion = $transaccion1 ORDER BY fecha ASC";
                 $ex_query = $conexion->query($sql_1);
                 if($ex_query->num_rows>0){
                                 /*  '.$regs['concepto'].' */
                          while ($regs = $ex_query->fetch_assoc()) {
                             $content .=' 
-                                <tr height="20">
-                                <td width = "5%" align="center">'.$regs['id'].'</td>
-                                <td width = "15%" align="center">'.$regs['fecha'].'</td>
+                                <tr>
+                                <td width = "10%" align="center">'.$regs['id'].'</td>
+                                <td width = "20%" align="center">'.$regs['fecha'].'</td>
                                 <td width = "10%" align="center">'.$regs['cuenta'].'</td>
-                                <td width = "40%" height="35" align="left">   </td> 
-                                <td width = "10%" align="center">'.$regs['debe'].'</td>
-                                <td width = "10%" align="center">'.$regs['haber'].'</td>
-                                <td width = "15%" align="center">-</td>
+                                <td width = "20%" align="center">'.$regs['debe'].'</td>
+                                <td width = "20%" align="center">'.$regs['haber'].'</td>
+                                <td width = "20%" align="center">-</td>
                             </tr>';
                             } 
 
@@ -81,7 +81,7 @@ if(isset($_POST['create_pdf'])){
                     $dif = $regs['sumadebe']-$regs['sumahaber'];
                     $content .=' 
                     <tr>
-                    <td colspan="4" align="center"> SUMA FICHA NRO:'.$transaccion1 .' </td>
+                    <td colspan="3" align="center"> SUMA FICHA NRO:'.$transaccion1 .' </td>
                     <td align="center">Bs. '.number_format($regs['sumadebe'], 2).'</td>
                     <td align="center">Bs.'.number_format($regs['sumahaber'], 2).'</td>
                     </tr>
@@ -95,46 +95,39 @@ if(isset($_POST['create_pdf'])){
                 }
 }
 
-    $sql3 = "SELECT sum(debe) as sumadebe, sum(haber) as sumahaber from registro";
-                $ejecutar_consulta = $conexion->query($sql3);
-                    while($registro = $ejecutar_consulta->fetch_assoc()){
-                    $dif = $registro["sumadebe"]-$registro["sumahaber"];
-                    $content.=' 
-                   
-                    <div class="row">
-                        <div class="col-lg-12">
-                    <table class="table-bordered" border="0.5" width="100%">
-                    <tr>
-                        <td colspan"4" class="center"width="70%">
-                            <strong>SUMAS TOTALES</strong></td>
+    $sql = "SELECT sum(debe) as sumadebe, sum(haber) as sumahaber from registro";
+        $ejecutar_consulta = $conexion->query($sql);
+        while($registro = $ejecutar_consulta->fetch_assoc()){
+            $dif = $registro["sumadebe"]-$registro["sumahaber"];
+            $content.='
+            <br>
+            <br>
+            <br>
+           
+            <table border="1" width="100%" align="center">
+           
+            <tr>
+            <td width="40%" align="center"> <font color="green"> <strong>SUMAS TOTALES</strong></font></td>
+            <td width="20%" align="center"><font color="green"><strong>$ '.number_format($registro['sumadebe'],2).'</strong></font></td>
+            <td width="20%" align="center"><font color="green"><strong>$ '.number_format($registro['sumahaber'], 2).'</strong></font></td>
+            ';
 
-                        <td  align="center" >
-                            <strong>Bs.'.number_format($registro['sumadebe'],2).'</strong></td>
-
-                       <td align="center">
-                            <strong>Bs'.number_format($registro['sumahaber'], 2).' </strong>
-                       </td>
-                       
-                       ';
-
-                       if($dif!=0){
-                        $content .='
-                        <td "align="center" ><strong>Bs. '.number_format($dif, 2).'</strong></td>
-                        '; }
-                        else{
-                        $content .='
-                        <td width="10%></td>
-                        ';
-                    }
-                    $content .='        
-                    </tr>
-                    </table>
-                    </div>
-                    </div>
-                    ';
-      
-                    
-    }  
+            if($dif!=0){
+                $content.='
+                <td width="20%" align="center"><font color="green"><strong>$ '.number_format($dif, 2).'</strong></font></td>
+                ';
+            } else{
+                $content.='
+                <td width="20%"></td>
+                ';
+            }
+            $content.='
+            </tr>
+         
+            </table>
+           
+            ';
+        }
        
   }     
     $pdf->writeHTMLCell(0, 0, '', '', $content, 0, 1, 0, true, '', true);
