@@ -127,7 +127,7 @@ if (isset($_POST['registrar_datos'])) {
         $sqenti = "INSERT INTO entidad(id, nombre, direccion, telefono, ciudad) VALUES ('$id','$nombre' , '$direccion', '$telefono', '$ciudad');";
         $conexion->query($sqenti);
 
-        $sqenti = "INSERT INTO usuario(usuario, password, fecha, tipo) VALUES ('$usuario','$contraseña','$hoy', 'Administrador');";
+        $sqenti = "INSERT INTO usuario(usuario, password, fecha, tipo) VALUES ('$usuario','$contraseña','$hoy', 'administrador');";
         $conexion->query($sqenti);
 
         $mensaje = "Usted se ha registrado correctamente.";
