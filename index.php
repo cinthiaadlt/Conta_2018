@@ -11,6 +11,7 @@
 */
 ?>
 <?php
+require('php/conexion.php');
 	error_reporting(E_ALL ^ E_NOTICE);
 
 	if($_COOKIE["sesion"])
@@ -58,6 +59,27 @@
 				echo "</div>";
 			}
 		?>
+
+<?php
+$consul = "SELECT * FROM entidad";
+$rrr = $conexion->query($consul);
+if ($rrr->num_rows == 0) {
+    ?>
+          <table width="100%">
+            <tr>
+              <td width="98%"></td>
+              <td>
+                <form  action="php/entidad.php" method="post">
+                  <div>
+                    <input name="entrar" class="btn btn-sm btn-primary btn-block" type="submit" value="Primera vez en el sistema">
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </table>
+      <?php
+}
+?>
 
 		<div class="jumbotron text-center">
 			<h2>Bienvenido </h2>
