@@ -26,10 +26,9 @@ $content .= '
 					<td colspan="4">
 					<h2 class="text-center" align="center">Balance General</h2>
 						<p align="center">';
-						 $fechaactual = getdate();
-			            print_r($fechaactual);
-			            $content .= '
-			            Hasta la fecha: '.$fechaactual[mday].' de '.$fechaactual[month].' de '.$fechaactual[year].' 
+							$fecha_ac = actual_date();	
+							 $content .= '
+							 '.$fecha_ac.'
 						</p>
 					</td>
 				</tr>
@@ -115,7 +114,7 @@ $content .= '
 							<thead>
 							<tr>
 								<th colspan="2" align="center">
-								<b><FONT SIZE="12" face="verdana" color="orange">CAPITAL;
+								<b><FONT SIZE="12" face="verdana" color="orange">CAPITAL
 								</font>	</b>
 								</th>
 							</tr>	
@@ -151,7 +150,7 @@ $content .= '
 						<table class="table" border ="0.5">
 							
 									<tr>
-									<td class="text-right"><strong>Total Pasivos + Capital:</strong></td>
+									<td class="text-right"><strong>TOTAL PASIVOS + CAPITAL:</strong></td>
 									<td align="center">'.number_format($total_pasivos+$total_capital,2).'</td>
 									</tr>
 																				
