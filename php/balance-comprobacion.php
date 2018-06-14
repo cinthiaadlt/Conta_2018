@@ -42,111 +42,102 @@ if(isset($_POST['create_pdf'])){
                                 </tr>
                             </thead>
     ';
+
+
+
+                                $total_a=0;
+                                $total_d=0;
                             /*Suma segun subgurupos de cuentas*/
-                                while ($subg = $consulta->fetch_assoc()) {
-                                    $sql = "SELECT * FROM cuentas where subgrupo='".$subg["subgrupo"]."' ";
-                                    $ejecutar = $conexion->query($sql);
-                                    $deudor=0;
-                                    $acreedor=0;
-                                    while($regs = $ejecutar->fetch_assoc()){
-                                        $content.='
-                                            <tr>
-                                            <td>'.utf8_encode($regs["codigo_cuenta"]).''.utf8_encode($regs["nombre_cuenta"]).'</td>
-                                        ';
-                                        if($regs["saldo_debe"]==0){
-                                            $deudor =$deudor+0; 
-                                            $acreedor =$acreedor+($regs["saldo_haber"]-$regs["saldo_haber"]);
-                                            $content.='
-                                            <td class="text-right">'.number_format($regs["saldo_debe"],2).'</td>
-                                            <td class="text-right">'.number_format($regs["saldo_haber"],2).'</td>
-                                            <td align="right">$'.number_format($deudor, 2).'</td>
-                                            <td align="right">$'.number_format($acreedor, 2).'</td>
+            while ($subg = $consulta->fetch_assoc()) {
+                $sql = "SELECT * FROM cuentas where subgrupo='".$subg["subgrupo"]."' ";
+                $ejecutar = $conexion->query($sql);
+                $deudor=0;
+                $acreedor=0;
+                $sum_a=0;
+                $sum_d=0;
+                while($regs = $ejecutar->fetch_assoc()){
+                    $content.='
+                        <tr>
+                        <td>'.utf8_encode($regs["codigo_cuenta"]).''.utf8_encode($regs["nombre_cuenta"]).'</td>
+                    ';
+                    if($regs["saldo_debe"]==0){
+                        $deudor = 0; 
+                        $acreedor=$regs["saldo_haber"]-$regs["saldo_debe"];
+                        $sum_d=$sum_d+$deudor;
+                        $sum_a=$sum_a+$acreedor;
+                        $content.='
+                        <td class="text-right">'.number_format($regs["saldo_debe"],2).'</td>
+                        <td class="text-right">'.number_format($regs["saldo_haber"],2).'</td>
+                        <td align="right">$'.number_format($deudor, 2).'</td>
+                        <td align="right">$'.number_format($acreedor, 2).'</td>
+                        ';
+                    }elseif ($regs["saldo_haber"]==0){
+                        $deudor =$regs["saldo_debe"]-$regs["saldo_haber"]; 
+                        $acreedor=0;
+                        $sum_d=$sum_d+$deudor;
+                        $sum_a=$sum_a+$acreedor;
+                        $content.='
+                        <td class="text-right">'.number_format($regs["saldo_debe"],2).'</td>
+                        <td class="text-right">'.number_format($regs["saldo_haber"],2).'</td>
+                        <td align="right">$ '.number_format($deudor, 2).'</td>
+                        <td align="right">$ '.number_format($acreedor, 2).'</td>
+                        ';
+                    }elseif ($regs["saldo_debe"]<$regs["saldo_haber"]) {
+                            $deudor = 0; 
+                            $acreedor=$regs["saldo_haber"] - $regs["saldo_debe"];
+                            $sum_d=$sum_d+$deudor;
+                            $sum_a=$sum_a+$acreedor;
+                            $content.=' 
+                            <td class="text-right">'.number_format($regs["saldo_debe"],2).'</td>
+                            <td class="text-right">'.number_format($regs["saldo_haber"],2).'</td>
+                            <td align="right">$'.number_format($deudor, 2).'</td>
+                            <td align="right">$'.number_format($acreedor, 2).'</td>
+                            ';
+                    }elseif ($regs["saldo_debe"]>$regs["saldo_haber"]) {
+                            $deudor = $regs["saldo_debe"]-$regs["saldo_haber"];
+                            $acreedor = 0;
+                            $sum_d=$sum_d+$deudor;
+                            $sum_a=$sum_a+$acreedor;
+                            $content.=' 
+                            <td class="text-right">'.number_format($regs["saldo_debe"],2).'</td>
+                            <td class="text-right">'.number_format($regs["saldo_haber"],2).'</td>
+                            <td align="right">$'.number_format($deudor, 2).'</td>
+                            <td align="right">$'.number_format($acreedor, 2).'</td>
                                             ';
-                                        }elseif ($regs["saldo_haber"]==0){
-                                            $deudor = $deudor+$regs["saldo_debe"]-$regs["saldo_haber"];
-                                            $acreedor = $acreedor+0;
-                                            $content.='
-                                            <td class="text-right">'.number_format($regs["saldo_debe"],2).'</td>
-                                            <td class="text-right">'.number_format($regs["saldo_haber"],2).'</td>
-                                            <td align="right">$ '.number_format($deudor, 2).'</td>
-                                            <td align="right">$ '.number_format($acreedor, 2).'</td>
-                                            ';
-                                        }elseif ($regs["saldo_debe"]<$regs["saldo_haber"]) {
-                                            if ($acreedor>$regs["saldo_debe"]) {
-                                                $acreedor=$acreedor-$regs["saldo_haber"];
-                                            }
-                                            else{
-                                                $acreedor=$acreedor-$regs["saldo_debe"];
-                                            }
-                                            $deudor =$deudor+ 0;
-                                            $acreedor =$acreedor+ ($regs["saldo-haber"]-$regs["saldo_debe"]);  
-                                            $content.=' 
-                                            <td class="text-right">'.number_format($regs["saldo_debe"],2).'</td>
-                                            <td class="text-right">'.number_format($regs["saldo_haber"],2).'</td>
-                                            <td align="right">$'.number_format($deudor, 2).'</td>
-                                            <td align="right">$'.number_format($acreedor, 2).'</td>
-                                            ';
-                                        }
-                                        elseif ($regs["saldo_debe"]>$regs["saldo_haber"]) {
-                                            if ($deudor>$regs["saldo_haber"]) {
-                                                $deudor=$deudor-$regs["saldo_debe"];
-                                            }
-                                            else{
-                                                $deudor=$deudor-$regs["saldo_haber"];
-                                            }
-                                            $deudor = $deudor+($regs["saldo_debe"]-$regs["saldo_haberbe"]);
-                                            $acreedor = $acreedor+ 0;
-                                            $content.=' 
-                                            <td class="text-right">'.number_format($regs["saldo_debe"],2).'</td>
-                                            <td class="text-right">'.number_format($regs["saldo_haber"],2).'</td>
-                                            <td align="right">$'.number_format($deudor, 2).'</td>
-                                            <td align="right">$'.number_format($acreedor, 2).'</td>
-                                            ';
-                                        }
-                                        $content.='</tr>';
-                                    }
+                        }    
+                    
+                                            $total_a=$total_a+$sum_a;
+                                            $total_d=$total_d+$sum_d;
+
+                    $content.='</tr>';
+                    }
                                     $content.='<tr bgcolor="#A4A4A4">
                                         <td align="right" colspan="3"><strong>Sumas Totales:</strong></td>
-                                        <td align="right">'.number_format($deudor,2).'</td>
-                                        <td align="right">'.number_format($acreedor,2).'</td>
+                                        <td align="right">'.number_format($sum_d,2).'</td>
+                                        <td align="right">'.number_format($sum_a,2).'</td>
                                     </tr>';
                                 }
                                     /*Total de todas las cuentas*/ 
-                                    $sql = "SELECT SUM(saldo_debe) sumadebe, SUM(saldo_haber) sumahaber FROM cuentas";
+                                    $sql = "SELECT SUM(saldo_debe) as sumadebe, SUM(saldo_haber) as sumahaber FROM cuentas";
                                     $ejecutar = $conexion->query($sql);
-                                    $content.='<tr bgcolor="#f5f5f5">';
+                                    $content.='<tr bgcolor="#a5f5f5">';
                                     while($reg = $ejecutar->fetch_assoc()){
-                                            if ($reg["sumadebe"]<$reg["sumahaber"]) {
-                                                    $deudor = 0;
-                                                    $acreedor = $reg["sumahaber"]-$reg["sumadebe"];
-                                                }
-                                                elseif ($reg["sumdebe"]>$reg["sumhaber"]) {
-                                                    $deudor = $reg["sumdebe"]-$reg["sumhaber"];
-                                                    $acreedor = 0;
-                                                }
-
+                                            
                                         if($reg["sumadebe"]!=$reg["sumahaber"]){
                                             $content.='<td class="danger"><strong>Totales:</strong> </td>
                                             <td class="text-right danger"><strong>'.number_format($reg["sumadebe"],2).'</strong></td>
                                             <td class="text-right danger"><strong>'.number_format($reg["sumahaber"],2).'</strong></td>
+                                            <td class="text-right danger"><strong>'.number_format($total_d,2).'</strong></td>
+                                            <td class="text-right danger"><strong>'.number_format($total_a,2).'</strong></td>
                                             ';
-                                            if ($reg["sumadebe"]>=$reg["sumahaber"]) {
-                                                $content.='<td class="text-right danger">$ '.number_format($reg["sumadebe"]-$reg["sumahaber"], 2).'</td>
-                                                <td class="text-right danger">$ '.number_format(0, 2).'</td>
-                                                ';
-                                            }
-                                            else{
-                                                $content.='<td class="text-right danger">$'.number_format(0, 2).'</td>
-                                                <td class="text-right danger">$'.number_format($reg["sumahaber"]-$reg["sumadebe"], 2).'</td>
-                                                ';
-                                            }
+                                            
                                         } else {
                                             $content.='
                                             <td><strong>Totales:</strong> </td>
                                             <td class="text-right"><strong>'.number_format($reg['sumadebe'],2).'</strong></td>
                                             <td class="text-right"><strong>'.number_format($reg['sumahaber'],2).'</strong></td>
-                                            <td class="text-right danger">$ '.number_format('0', 2).'</td>
-                                            <td class="text-right danger">$ '.number_format('0', 2).'</td>
+                                            <td class="text-right danger">$ '.number_format($total_d, 2).'</td>
+                                            <td class="text-right danger">$ '.number_format($total_a, 2).'</td>
                                             ';
                                         }   
                                     }
@@ -241,7 +232,8 @@ if(isset($_POST['create_pdf'])){
                                 </tr>
                                 <?php 
                                 error_reporting(E_ALL ^ E_NOTICE);
-                                
+                                $total_a=0;
+                                $total_d=0;
                                     
                                     /*Suma segun subgurupos de cuentas*/
                                 while ($subg = $consulta->fetch_assoc()) {
@@ -249,97 +241,81 @@ if(isset($_POST['create_pdf'])){
                                     $ejecutar = $conexion->query($sql);
                                     $deudor=0;
                                     $acreedor=0;
+                                    $sum_a=0;
+                                    $sum_d=0;
                                     while($regs = $ejecutar->fetch_assoc()){
                                         echo "<tr>";
                                         echo "<td>".utf8_encode($regs["codigo_cuenta"])." ".utf8_encode($regs["nombre_cuenta"])."</td>";
                                         if($regs["saldo_debe"]==0){
-                                            $deudor =$deudor+0; 
-                                            $acreedor =$acreedor+ ($regs["saldo_haber"]-$regs["saldo_haber"]);
+                                            $deudor = 0; 
+                                            $acreedor=$regs["saldo_haber"]-$regs["saldo_debe"];
+                                            $sum_d=$sum_d+$deudor;
+                                            $sum_a=$sum_a+$acreedor;
                                             echo "<td class='text-right'>".number_format($regs["saldo_debe"],2)."</td>";
                                             echo "<td class='text-right'>".number_format($regs["saldo_haber"],2)."</td>";
                                             echo "<td align='right'>$ ".number_format($deudor, 2)."</td>";
                                             echo "<td align='right'>$ ".number_format($acreedor, 2)."</td>";
                                         } elseif ($regs["saldo_haber"]==0){
-                                                    $deudor = $deudor+$regs["saldo_debe"]-$regs["saldo_haber"];
-                                                    $acreedor = $acreedor+0;
+                                                    $deudor =$regs["saldo_debe"]-$regs["saldo_haber"]; 
+                                                    $acreedor=0;
+                                                    $sum_d=$sum_d+$deudor;
+                                                    $sum_a=$sum_a+$acreedor;
                                                     echo "<td class='text-right'>".number_format($regs["saldo_debe"],2)."</td>";
                                                     echo "<td class='text-right'>".number_format($regs["saldo_haber"],2)."</td>";
                                                     echo "<td align='right'>$ ".number_format($deudor, 2)."</td>";
                                                     echo "<td align='right'>$ ".number_format($acreedor, 2)."</td>";
                                                 }elseif ($regs["saldo_debe"]<$regs["saldo_haber"]) {
-                                                    if ($acreedor>$regs["saldo_debe"]) {
-                                                        $acreedor=$acreedor-$regs["saldo_haber"];
-                                                    }
-                                                    else{
-                                                        $acreedor=$acreedor-$regs["saldo_debe"];
-                                                    }
-                                                    $deudor =$deudor+ 0;
-                                                    $acreedor =$acreedor+ ($regs["saldo-haber"]-$regs["saldo_debe"]);
+                                                     $deudor = 0; 
+                                                    $acreedor=$regs["saldo_haber"] - $regs["saldo_debe"];
+                                                    $sum_d=$sum_d+$deudor;
+                                                    $sum_a=$sum_a+$acreedor;
                                                     echo "<td class='text-right'>".number_format($regs["saldo_debe"],2)."</td>";
                                                     echo "<td class='text-right'>".number_format($regs["saldo_haber"],2)."</td>";
                                                     echo "<td align='right'>$ ".number_format($deudor, 2)."</td>";
                                                     echo "<td align='right'>$ ".number_format($acreedor, 2)."</td>";
                                                 }
                                                 elseif ($regs["saldo_debe"]>$regs["saldo_haber"]) {
-                                                    if ($deudor>$regs["saldo_haber"]) {
-                                                        $deudor=$deudor-$regs["saldo_debe"];
-                                                    }
-                                                    else{
-                                                        $deudor=$deudor-$regs["saldo_haber"];
-                                                    }
-
-                                                    $deudor = $deudor+($regs["saldo_debe"]-$regs["saldo_haberbe"]);
-                                                    $acreedor = $acreedor+ 0;
+                                                    $deudor = $regs["saldo_debe"]-$regs["saldo_haber"];
+                                                    $acreedor = 0;
+                                                    $sum_d=$sum_d+$deudor;
+                                                    $sum_a=$sum_a+$acreedor;
                                                     echo "<td class='text-right'>".number_format($regs["saldo_debe"],2)."</td>";
                                                     echo "<td class='text-right'>".number_format($regs["saldo_haber"],2)."</td>";
                                                     echo "<td align='right'>$ ".number_format($deudor, 2)."</td>";
                                                     echo "<td align='right'>$ ".number_format($acreedor, 2)."</td>";
                                                 }
-
                                             echo "</tr>";
-                                    }
+                                            
+                                            $total_a=$total_a+$sum_a;
+                                            $total_d=$total_d+$sum_d;
+                                        }
+                                    
                                     echo "<tr>";
                                     echo "<td class='text-right' colspan='3'><strong>Sumas Totales:</strong></td>";
-                                    echo "<td align='right'>".number_format($deudor,2)."</td>";
-                                    echo "<td align='right'>".number_format($acreedor,2)."</td>";
+                                    echo "<td align='right'>".number_format($sum_d,2)."</td>";
+                                    echo "<td align='right'>".number_format($sum_a,2)."</td>";
                                     echo "</tr>";
+                                    
                                 }
                                     /*Total de todas las cuentas*/ 
                                     $sql = "SELECT SUM(saldo_debe) sumadebe, SUM(saldo_haber) sumahaber FROM cuentas";
                                     $ejecutar = $conexion->query($sql);
                                     echo "<tr>";
                                     while($reg = $ejecutar->fetch_assoc()){
-                                            if ($reg["sumadebe"]<$reg["sumahaber"]) {
-                                                    $deudor = 0;
-                                                    $acreedor = $reg["sumahaber"]-$reg["sumadebe"];
-                                                }
-                                                elseif ($reg["sumdebe"]>$reg["sumhaber"]) {
-                                                    $deudor = $reg["sumdebe"]-$reg["sumhaber"];
-                                                    $acreedor = 0;
-                                                }
-
                                         if($reg["sumadebe"]!=$reg["sumahaber"]){
                                             echo "<td class='danger'><strong>Totales:</strong> </td>";
                                             echo "<td class='text-right danger'><strong>".number_format($reg["sumadebe"],2)."</strong></td>";
                                             echo "<td class='text-right danger'><strong>".number_format($reg["sumahaber"],2)."</strong></td>";
-                                            if ($reg["sumadebe"]>=$reg["sumahaber"]) {
-                                                echo "<td class='text-right danger'>$ ".number_format($reg["sumadebe"]-$reg["sumahaber"], 2)."</td>";
-                                                echo "<td class='text-right danger'>$ ".number_format(0, 2)."</td>";
-                                            }
-                                            else{
-                                                echo "<td class='text-right danger'>$ ".number_format(0, 2)."</td>";
-                                                echo "<td class='text-right danger'>$ ".number_format($reg["sumahaber"]-$reg["sumadebe"], 2)."</td>";
-                                            }
-                                            
-                                            
+                                            echo "<td class='text-right danger'><strong>".number_format($total_d,2)."</strong></td>";
+                                            echo "<td class='text-right danger'><strong>".number_format($total_a,2)."</strong></td>";
                                         } else {
                                             echo "<td><strong>Totales:</strong> </td>";
                                             echo "<td class='text-right'><strong>".number_format($reg["sumadebe"],2)."</strong></td>";
                                             echo "<td class='text-right'><strong>".number_format($reg["sumahaber"],2)."</strong></td>";
-                                            echo "<td class='text-right danger'>$ ".number_format('0', 2)."</td>";
-                                            echo "<td class='text-right danger'>$ ".number_format('0', 2)."</td>";
+                                            echo "<td class='text-right'><strong>".number_format($total_d,2)."</strong></td>";
+                                            echo "<td class='text-right'><strong>".number_format($total_a,2)."</strong></td>";
                                         }
-                                    }
+                                    }                                   
                                     echo "</tr>";
                                 
                                 ?>
