@@ -6,6 +6,7 @@ if(!isset($conexion)){
                                     $consulta = $conexion->query($consulta);
 if(isset($_POST['create_pdf'])){
   include('../tcpdf/tcpdf.php');
+  include('funciones.php');
     
     $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
@@ -24,6 +25,11 @@ if(isset($_POST['create_pdf'])){
         <div class="row row-offcanvas row-offcanvas-right">
             <div class="col-xs-12 col-sm-9">
                   <h3 style="text-align:center;">BALANCE DE COMPROBACION</h3>
+                  <p align="center">';
+                            $fecha_ac = actual_date();  
+                             $content .= '
+                             '.$fecha_ac.'
+                        </p>
                 <div class="col-lg-12">
                         <table class="table table-condensed table-bordered table-striped" border="1" cellpadding="5">
                             <thead >
