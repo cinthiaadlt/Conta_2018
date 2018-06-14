@@ -95,6 +95,13 @@ require 'conexion.php';
                                               </td>
                                             </tr>
                                           </table>
+                                          <center><h4 class="mb"><i class="fa fa-angle-right"></i> Anio Contable</h4>
+                                                <center>  <div class="form-group">
+                                                  <label class="col-sm-2 col-sm-2 control-label">Anio:&emsp; </label>
+                                                  <center><div class="col-sm-8">
+                                                      <input type="text" class="form-control" name="anio">
+                                                  </div>
+                                                </div>
                             </div>
                             <div class="modal-footer">
                                 <input type="submit"  class="btn btn-default" name="cancelar" value="CANCELAR">
@@ -123,11 +130,15 @@ if (isset($_POST['registrar_datos'])) {
         $ciudad = $_POST['ciudad_entidad'];
         $usuario = $_POST['usuario'];
         $contraseña = $_POST['contraseña'];
+        $anio = $_POST['anio'];
 
         $sqenti = "INSERT INTO entidad(id, nombre, direccion, telefono, ciudad) VALUES ('$id','$nombre' , '$direccion', '$telefono', '$ciudad');";
         $conexion->query($sqenti);
 
         $sqenti = "INSERT INTO usuario(usuario, password, fecha, tipo) VALUES ('$usuario','$contraseña','$hoy', 'administrador');";
+        $conexion->query($sqenti);
+
+        $sqenti = "INSERT INTO anio_contable(id, anio_contable) VALUES ('$id','$anio');";
         $conexion->query($sqenti);
 
         $mensaje = "Usted se ha registrado correctamente.";
