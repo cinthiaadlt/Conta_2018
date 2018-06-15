@@ -119,8 +119,7 @@ $content .= '
                         </p>
                     </div>
                     <hr>
-						<div class="col-lg-12">
-
+                    	<div class="col-lg-12">
 							<table class="table ">
 								<thead>
 									<tr>
@@ -137,24 +136,26 @@ $content .= '
 							</table>
 
 						</div>
-
+							
 						<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
 									<div>
 										<div class="row">
 											<div class="col-lg-12">
-
-												<table class="table table-condensed table-bordered table-hover ">
+												<?php
+													include_once("conexion.php");
+													$sql = "SELECT * FROM cuentas WHERE codigo_cuenta LIKE '4%' or codigo_cuenta LIKE '6%' or codigo_cuenta LIKE '7%' ";
+													$ejecutar = $conexion->query($sql);
+													//cuenta el numero de registros en la BD para mostrar el estado de resultados
+													if($ejecutar->num_rows > 0) {	
+												?>
+														<table class="table table-condensed table-bordered table-hover ">
 													<tr>
 														<th >Cuentas</th>
 														<th >Totales</th>
 													</tr>
-													<?php
-													include_once("conexion.php");
-													$sql = "SELECT * FROM cuentas WHERE codigo_cuenta LIKE '4%' or codigo_cuenta LIKE '6%' or codigo_cuenta LIKE '7%' ";
-													$ejecutar = $conexion->query($sql);
-													if($ejecutar->num_rows > 0) {						
+													<?php					
 													while($acts = $ejecutar->fetch_assoc()){
 														echo "<tr colspan='2'>";
 														echo "<td >".$acts["codigo_cuenta"].". ".utf8_encode($acts["nombre_cuenta"])."</td>";
@@ -174,8 +175,9 @@ $content .= '
 													}
 													}
 													else{
-														$mensaje = "No existen asientos registrados con las clases 4,6 o 7";
-														header("Location: estado-resultados.php?error=si&mensaje=$mensaje");
+														echo "<div class='alert alert-info'>";
+                            							echo "No existen asientos registrados con las clases 4,6 o 7.";
+                            							echo "</div>";
 													}
 													?>
 												</table>

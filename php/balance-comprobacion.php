@@ -158,7 +158,7 @@ if(isset($_POST['create_pdf'])){
 
 
 
-<!--CONTENIDO DE LA PAGINA--->
+<!--CONTENIDO DE LA PAGINA-->
 <?php 
     include("sesion.php");
     if(!$_COOKIE["sesion"]){
@@ -194,6 +194,9 @@ if(isset($_POST['create_pdf'])){
                 </div>
                 <div class="row">
                     <div class="container">
+                    <?php
+                          if($consulta->num_rows!=0){
+                        ?>
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -222,6 +225,7 @@ if(isset($_POST['create_pdf'])){
                                     </th>
                                 </tr>
                             </thead>
+                        
                             <tbody>
                                 <tr>
                                     <th>Cuenta</th>
@@ -317,11 +321,14 @@ if(isset($_POST['create_pdf'])){
                                         }
                                     }                                   
                                     echo "</tr>";
-                                
+                                } else{
+                                    echo "<div class='alert alert-info'>";
+                                    echo "No hay asientos registrados.";
+                                    echo "</div>";
+                                }
                                 ?>
                             </tbody>
                         </table>
-                        
                     </div>
                 </div>
             <div class="col-md-12">
