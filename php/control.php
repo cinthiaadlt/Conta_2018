@@ -3,7 +3,7 @@
 
 	$usuario = $_POST["user_txt"];
 	$password = $_POST["password_txt"];
-	$consulta = "SELECT usuario FROM usuario WHERE usuario='$usuario' AND password='$password'";
+	$consulta = "SELECT usuario FROM usuario WHERE usuario='$usuario' AND password=sha1('$password')";
 	
 	$ejecutar_consulta = $conexion->query($consulta);
 
