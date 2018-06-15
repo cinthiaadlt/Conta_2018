@@ -118,7 +118,7 @@ if (isset($_POST['registrar_datos'])) {
     } else {
         $rs = $conexion->query("SELECT MAX(id) AS iden FROM entidad");
         if ($row = $rs->fetch_row()) {
-            $iden = trim($row[0]);
+            $iden = $row[0];
         }
         $id = $iden + 1;
 
@@ -135,7 +135,7 @@ if (isset($_POST['registrar_datos'])) {
         $sqenti = "INSERT INTO entidad(id, nombre, direccion, telefono, ciudad) VALUES ('$id','$nombre' , '$direccion', '$telefono', '$ciudad');";
         $conexion->query($sqenti);
 
-        $sqenti = "INSERT INTO usuario(usuario, password, fecha, tipo) VALUES ('$usuario','$contraseña','$hoy', 'administrador');";
+        $sqenti = "INSERT INTO usuario(usuario, password, fecha, tipo) VALUES ('$usuario',sha1('$contraseña'),'$hoy', 'administrador');";
         $conexion->query($sqenti);
 
         $sqenti = "INSERT INTO anio_contable(id, anio_contable) VALUES ('$id','$anio');";
@@ -147,7 +147,6 @@ if (isset($_POST['registrar_datos'])) {
 }
 ?>
           </form>
-
       </div>
     </div>
 <br><br>
