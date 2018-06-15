@@ -88,7 +88,7 @@ require 'conexion.php';
                                               <div class="form-group">
                                                   <label class="col-sm-3 col-sm-3 control-label">Contraseña:&emsp; </label>
                                                   <div class="col-sm-8">
-                                                      <input type="text" class="form-control" name="contraseña">
+                                                      <input type="password" class="form-control" name="contraseña">
                                                   </div>
                                               </div>
                                             <br>
