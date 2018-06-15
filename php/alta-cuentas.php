@@ -76,9 +76,7 @@
 										<input type="hidden" value="1" name="tipo_hdn"/>
 										<div class="col-lg-6">
 											<label for="clase" class="control-label">Clase</label>
-											<!--<select name="clase_slc" id="clase" class="form-control" required>
-												<option value="">Seleccione</option>
-											<?php include("select-codigo_clase.php"); ?>-->
+											<?php include("select-codigo_clase.php"); ?>
 											<input type="text" id="num_clase" name="num_clase" class="form-control" title="Escriba un nombre para la clase" placeholder="Escriba el numero asignado a la clase" required/>
 											</select>
 										</div>
