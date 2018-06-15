@@ -7,7 +7,19 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-
+<?php
+			if(!isset($conexion)){
+				include("conexion.php");
+			}
+			$usuario = $_SESSION["usuario"];
+        	$consulta = "SELECT * FROM usuario WHERE usuario='$usuario'";
+        	$ejecutar_consulta = $conexion->query($consulta); 
+        	while($registro=$ejecutar_consulta->fetch_assoc()) 
+				{
+					$_SESSION["tipo"]=$registro["tipo"];
+				}
+			if($_SESSION['tipo']=="administrador" || $_SESSION['tipo']=="estandar" ){
+?>
 		<div class="collapse navbar-collapse navHeaderCollapse">
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="home.php"><span class="glyphicon glyphicon-home"></span> &nbsp;Inicio</a></li>
@@ -21,7 +33,7 @@
 						<li><a href="diario.php"> ● &nbsp;Libro Diario General</a></li>
 						
 						<li class="divider"></li>
-						<li><a href="buscar-asiento.php"> ● &nbsp;Buscar/Editar</a></li>
+						<li><a href="buscar-asiento.php"> ● &nbsp;Buscar</a></li>
 					</ul>
 				</li>
 
@@ -40,7 +52,10 @@
 						<li><a href="listar-subgrupos.php"> ● &nbsp;Listado de Subgrupos</a></li>
 					</ul>
 				</li>
-
+<?php
+}
+if($_SESSION['tipo']=="administrador" ){
+?>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Estados Financieros <b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -51,14 +66,13 @@
 
 					</ul>
 				</li>
-
+<?php
+}
+?>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Acerca <b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="#acerca" data-toggle="modal"><span class="glyphicon glyphicon-info-sign"></span> &nbsp;Acerca del sistema</a></li>
-						<!--
-						<li><a href="#creditos" data-toggle="modal"><span class="glyphicon glyphicon-flash"></span>&nbsp; Sobre los programadores</a></li>
-						-->
 					</ul>
 				</li>
 					
