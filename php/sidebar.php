@@ -62,6 +62,23 @@
                 echo "</div>";
                 echo "</div>";
             }
+            if(($_SESSION['tipo']=="estandar")) {
+                echo "<div class='panel panel-primary'>";
+                echo "<div class='panel-heading'>";
+                echo "<h3 class='panel-title text-center'>Cuentas</h3>";
+                echo "</div>";
+                echo "<div class='panel-body' id='sb'>";
+                echo "<div class='list-group text-right'>";
+                echo "<a href='buscar-cuentas.php' class='list-group-item'>&#0171; Búsquedas</a>";
+                echo "<a href='catalogo-cuentas.php' class='list-group-item'>&#0171; Catálogo General de Cuentas</a>";
+                echo "<a href='listar-subcuentas.php' class='list-group-item'>&#0171; Listado de Subcuentas</a>";
+                echo "<a href='listar-cuentas.php' class='list-group-item'>&#0171; Listado de Cuentas</a>";
+                echo "<a href='listar-subgrupos.php' class='list-group-item'>&#0171; Listado de Subgrupos</a>";
+                echo "<a href='actualizar.php' class='list-group-item'>&#0171; Actualizaciones</a>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+            }
             $conexion->close();
                 ?>
 
@@ -69,18 +86,14 @@
 			<div class="panel-heading">
 				<h3 class="panel-title text-center">Fichas</h3>
 			</div>
-
 			<div class="panel-body" id="sb">
 				<div class="list-group text-right">
 					<a href="asiento-general.php" class="list-group-item">&#0171; Ingreso/Egreso</a>
                     <a href="asiento-simple.php" class="list-group-item">&#0171; Inversiones</a>
 <!--					<a href="asiento-simple.php" class="list-group-item">&#0171; Simples</a>-->
 					<a href="diario.php" class="list-group-item">&#0171; Libro Diario</a>
-					<a href="buscar-asiento.php" class="list-group-item">&#0171; Buscar/Editar</a>
+					<a href="buscar-asiento.php" class="list-group-item">&#0171; Buscar</a>
 				</div>
 			</div>
 		</div>
-
-
-
 	</div>

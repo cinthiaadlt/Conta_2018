@@ -95,19 +95,6 @@ if ($rrr->num_rows == 0) {
 			<button class="btn btn-lg btn-primary btn-block" type="submit"><span class="glyphicon glyphicon-log-in"></span> &nbsp;Iniciar sesión</button>
 		</form>
 	</div>
-	<!--
-	<div class="navbar navbar-inverse navbar-fixed-bottom">
-		<div class="container">
-			<p class="navbar-text pull-left">
-				Computerized Accountancy System | Todos los derechos reservados &copy; 2013.
-			</p>
-
-			<p class="navbar-text pull-right">
-				SIC115 FIA-UES
-			</p>
-		</div>
-	</div>
-	-->
 	<script src="js/validaciones.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/jquery.min.js"></script>
