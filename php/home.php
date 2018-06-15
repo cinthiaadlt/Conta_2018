@@ -31,37 +31,6 @@
 				<div class="page-header">
         			<h3>Bienvenido/a, <?php echo "<em style='text-transform:capitalize'>" . $_SESSION['usuario'] . "</em>"; ?></h3>
         		</div>
-				    <!--
-        		<div class="row">
-            		<div class="jumbotron col-xs-12 text-center">
-            			<div class="container">
-	            			<h1>¡Gracias por usar C.A.S!</h1>
-	            			<br>
-	            			<p>
-	            				C.A.S es un sistema de contabilidad basado en la web, en donde puede registrar los procesos contables de manera eficaz, rápida y sencilla. Para utilizar las funciones, puede acceder a ellas mediante la barra de navegación que se encuentra en la parte superior de su pantalla, o bien, puede utilizar el menú de la derecha. 
-	            			</p>
-            			</div>
-            		</div>
-          		</div>
-
-          		<div class="row">
-          			<div class="col-lg-12 well">
-          				<h3>Objetivo de C.A.S</h3>
-          				<p align="justify">
-          					El objetivo primordial de este software es el de cumplir adecuadamente con los requerimientos de la contabilidad para llevar a cabo el proceso de registro de todas las transacciones relativas a los aspectos contables de una empresa. En este caso, el sistema facilitará los registros contables de una "Sociedad propuesta", que se encarga de la fabricación de vinos a base de frutas naturales de la región de los nonualcos en El Salvador.
-          				</p>
-          			</div>
-          		</div>
-             
-          		<div class="row">
-          			<div class="col-lg-12 well">
-          				<h3>¿Cómo empezar?</h3>
-          				<p align="justify">
-          					Una buena forma de comenzar es echándole un vistazo al catálogo general de cuentas, en él aparecen las cuentas que el sistema posee por defecto, organizadas por Grupo, Subgrupo, Cuenta y Subcuenta, y subdivididas en Activo, Pasivo, Capital y Resultados. Luego de revisar estas cuentas, podría iniciar registrando nuevas cuentas (sólo si es usuario administrador) y con esto estará listo para empezar a hacer asientos de sus transacciones contables.
-          				</p>
-          			</div>
-          		</div>
-              -->
           		<div class="row">
           			<div class="col-lg-12 well">
           				<h3>Recomendaciones</h3>
