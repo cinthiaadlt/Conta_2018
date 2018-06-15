@@ -194,13 +194,10 @@ if(isset($_POST['create_pdf'])){
                 </div>
                 <div class="row">
                     <div class="container">
-                    <?php
-                          if($consulta->num_rows!=0){
-                        ?>
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th colspan="6">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6">
                                     <!--Nombre de la entidad -->
                                         <h2 class="text-center">Balance de Comprobación</h2>
                                         <p align="center">
@@ -222,11 +219,10 @@ if(isset($_POST['create_pdf'])){
                                                 document.write("Al " + fecha.getDate() + " de " + month[fecha.getMonth()] + " de " + fecha.getFullYear());
                                             </script>
                                         </p>
-                                    </th>
-                                </tr>
-                            </thead>
-                        
-                            <tbody>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                 <tr>
                                     <th>Cuenta</th>
                                     <th>Debe</th>
@@ -238,7 +234,8 @@ if(isset($_POST['create_pdf'])){
                                 error_reporting(E_ALL ^ E_NOTICE);
                                 $total_a=0;
                                 $total_d=0;
-                                    
+                                    $consulta = "SELECT DISTINCT(c.codigo_cuenta),c.subgrupo,SUM((c.saldo_debe)) sumdebe,SUM((c.saldo_haber)) sumhaber FROM cuentas c,subgrupos s WHERE c.subgrupo=s.codigo_subgrupo GROUP by c.subgrupo";
+                                    $consulta = $conexion->query($consulta);
                                     /*Suma segun subgurupos de cuentas*/
                                 while ($subg = $consulta->fetch_assoc()) {
                                     $sql = "SELECT * FROM cuentas where subgrupo='".$subg["subgrupo"]."' ";
@@ -289,7 +286,6 @@ if(isset($_POST['create_pdf'])){
                                                     echo "<td align='right'>$ ".number_format($acreedor, 2)."</td>";
                                                 }
                                             echo "</tr>";
-                                            
                                             $total_a=$total_a+$sum_a;
                                             $total_d=$total_d+$sum_d;
                                         }
@@ -299,7 +295,6 @@ if(isset($_POST['create_pdf'])){
                                     echo "<td align='right'>".number_format($sum_d,2)."</td>";
                                     echo "<td align='right'>".number_format($sum_a,2)."</td>";
                                     echo "</tr>";
-                                    
                                 }
                                     /*Total de todas las cuentas*/ 
                                     $sql = "SELECT SUM(saldo_debe) sumadebe, SUM(saldo_haber) sumahaber FROM cuentas";
@@ -321,11 +316,6 @@ if(isset($_POST['create_pdf'])){
                                         }
                                     }                                   
                                     echo "</tr>";
-                                } else{
-                                    echo "<div class='alert alert-info'>";
-                                    echo "No hay asientos registrados.";
-                                    echo "</div>";
-                                }
                                 ?>
                             </tbody>
                         </table>
