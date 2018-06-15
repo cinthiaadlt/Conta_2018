@@ -133,7 +133,7 @@ if(isset($_POST['create_pdf'])){
 
 
 
-<!--CONTENIDO DE LA PAGINA--->
+<!--CONTENIDO DE LA PAGINA-->
 <?php 
     include("sesion.php");
     if(!$_COOKIE["sesion"]){
@@ -185,27 +185,30 @@ if(isset($_POST['create_pdf'])){
                     <hr>
 
                     <div class="col-lg-12">
-                        <table class="table table-condensed table-bordered table-striped">
-                            <thead>
-                                <tr>
+                        <?php
+                            if(!isset($conexion)){
+                                    include("conexion.php");
+                            }
+                            $sql = "SELECT DISTINCTROW(cuenta) cuentas FROM registro";
+                                $ejecutar_consulta = $conexion->query($sql);
+                            if($ejecutar_consulta->num_rows!=0){ 
+                        ?>
+                               <table class="table table-condensed table-bordered table-striped">
+                                    <thead>
+                                    <tr>
                                     <th>Cuenta</th>
                                     <th width="100">Debe</th>
                                     <th width="100">Haber</th>
-                                    
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                                if(!isset($conexion)){
-                                    include("conexion.php");
-                                }
-                                $sql = "SELECT DISTINCTROW(cuenta) cuentas FROM registro";
-                                $ejecutar_consulta = $conexion->query($sql);
-                                while($registro = $ejecutar_consulta->fetch_assoc()){
-                                    actualizarCuentas($conexion, $registro["cuentas"]);
-                                }
-                                $consulta = "SELECT DISTINCT(c.codigo_cuenta),c.subgrupo,SUM((c.saldo_debe)) sumdebe,SUM((c.saldo_haber)) sumhaber FROM cuentas c,subgrupos s WHERE c.subgrupo=s.codigo_subgrupo GROUP by c.subgrupo";
-                                $consulta = $conexion->query($consulta);
+                                    </tr>
+                                    </thead>
+                                <tbody>
+
+                                <?php
+                                    while($registro = $ejecutar_consulta->fetch_assoc()){
+                                        actualizarCuentas($conexion, $registro["cuentas"]);
+                                    }
+                                    $consulta = "SELECT DISTINCT(c.codigo_cuenta),c.subgrupo,SUM((c.saldo_debe)) sumdebe,SUM((c.saldo_haber)) sumhaber FROM cuentas c,subgrupos s WHERE c.subgrupo=s.codigo_subgrupo GROUP by c.subgrupo";
+                                    $consulta = $conexion->query($consulta);
                                             while ($subg = $consulta->fetch_assoc()) {
                                                 $sql = "SELECT * FROM cuentas where subgrupo='".$subg["subgrupo"]."' ";
                                                 $ejecutar_consulta = $conexion->query($sql);
@@ -218,8 +221,6 @@ if(isset($_POST['create_pdf'])){
                                                     echo "</tr>";
                                                     }
                                                 }
-                                                
-                                                
                                                     echo "<tr>";
                                                     echo "<td class='text-right'><strong>Sumas Totales:</strong></td>";
                                                     echo "<td align='right'>".number_format($subg["sumdebe"],2)."</td>";
@@ -228,22 +229,28 @@ if(isset($_POST['create_pdf'])){
                                                     echo "</tr>";
                                             }
                                             $sql = "SELECT SUM(saldo_debe) sumadebe, SUM(saldo_haber) sumahaber FROM cuentas";
-                                    $ejecutar = $conexion->query($sql);
-                                    echo "<tr>";
-                                    while($reg = $ejecutar->fetch_assoc()){
-                                        if($reg["sumadebe"]!=$reg["sumahaber"]){
-                                            echo "<td class='danger'><strong>Totales:</strong> </td>";
-                                            echo "<td class='text-right danger'><strong>".number_format($reg["sumadebe"],2)."</strong></td>";
-                                            echo "<td class='text-right danger'><strong>".number_format($reg["sumahaber"],2)."</strong></td>";
-                                        } else {
-                                            echo "<td><strong>Totales:</strong> </td>";
-                                            echo "<td class='text-right'><strong>".number_format($reg["sumadebe"],2)."</strong></td>";
-                                            echo "<td class='text-right'><strong>".number_format($reg["sumahaber"],2)."</strong></td>";
-                                        }
+                                            $ejecutar = $conexion->query($sql);
+                                            echo "<tr>";
+                                            while($reg = $ejecutar->fetch_assoc()){
+                                                if($reg["sumadebe"]!=$reg["sumahaber"]){
+                                                    echo "<td class='danger'><strong>Totales:</strong> </td>";
+                                                    echo "<td class='text-right danger'><strong>".number_format($reg["sumadebe"],2)."</strong></td>";
+                                                    echo "<td class='text-right danger'><strong>".number_format($reg["sumahaber"],2)."</strong></td>";
+                                                }else{
+                                                    echo "<td><strong>Totales:</strong> </td>";
+                                                    echo "<td class='text-right'><strong>".number_format($reg["sumadebe"],2)."</strong></td>";
+                                                    echo "<td class='text-right'><strong>".number_format($reg["sumahaber"],2)."</strong></td>";
+                                                }
                                         
-                                    }
-                                    echo "</tr>";
-                            ?>
+                                            }
+                                            echo "</tr>";
+                            }
+                            else {
+                                echo "<div class='alert alert-info'>";
+                                echo "No hay asientos.";
+                                echo "</div>";
+                        }
+                                ?>
                             </tbody>
                         </table>
                     </div>
