@@ -119,8 +119,7 @@ $content .= '
                         </p>
                     </div>
                     <hr>
-						<div class="col-lg-12">
-
+                    	<div class="col-lg-12">
 							<table class="table ">
 								<thead>
 									<tr>
@@ -137,7 +136,7 @@ $content .= '
 							</table>
 
 						</div>
-
+							
 						<div class="container">
 							<div class="row">
 								<div class="col-lg-12">
@@ -148,8 +147,10 @@ $content .= '
 													include_once("conexion.php");
 													$sql = "SELECT * FROM cuentas WHERE codigo_cuenta LIKE '4%' or codigo_cuenta LIKE '6%' or codigo_cuenta LIKE '7%' ";
 													$ejecutar = $conexion->query($sql);
+													//cuenta el numero de registros en la BD para mostrar el estado de resultados
 													if($ejecutar->num_rows > 0) {	
-														?>												<table class="table table-condensed table-bordered table-hover ">
+												?>
+														<table class="table table-condensed table-bordered table-hover ">
 													<tr>
 														<th >Cuentas</th>
 														<th >Totales</th>
