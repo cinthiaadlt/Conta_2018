@@ -31,6 +31,10 @@ if(isset($_POST['create_pdf'])){
 						</p>
 					</th>
 				</tr>
+				<tr>
+				<th colspan="3" align="center"><b>CUENTAS</b></th>
+				<th align="center"><b>TOTALES</b></th>
+			</tr>
 			</thead>
 			<tbody>
 			
@@ -40,6 +44,7 @@ if(isset($_POST['create_pdf'])){
             if($ejecutar->num_rows > 0){
                 while($acts = $ejecutar->fetch_assoc()){
                     $content .= '
+
                     <tr>
                     <td colspan="3" >'.$acts['codigo_cuenta'].'.'.utf8_encode($acts['nombre_cuenta']).'</td>
                     <td align="center">'.number_format($acts['saldo_debe']-$acts['saldo_haber'],2).'</td>
@@ -50,11 +55,11 @@ if(isset($_POST['create_pdf'])){
                 $ejecutar_consulta = $conexion->query($consulta);
                 if($ejecutar_consulta->num_rows > 0){
                     while ($regs = $ejecutar_consulta->fetch_assoc()) {
-                    	$color= '#F0A39C';
+                    	$color= '#9BE3D1';
                         $content.='<tr bgcolor="'.$color.'">';
                         $content .= '
-                        <td class="text-left"  colspan="3" ><strong>Total</strong></td>
-                        <td align="center">'.number_format($regs['total'],2).'</td>
+                        <td class="text-left" colspan="3" ><strong>TOTAL</strong></td>
+                        <td align="center"><b>Bs.'.number_format($regs['total'],2).'</b></td>
                         </tr>';
                     }
                 }
